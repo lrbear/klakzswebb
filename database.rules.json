@@ -1,0 +1,32 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "scripts": { ".read": "auth != null && auth.token.email_verified == true && root.child('licenses').child(auth.uid).child('active').val() == true && root.child('licenses').child(auth.uid).child('expiresAt').val() > now", ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "downloads": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "executors": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "projects": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "changelog": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "statuses": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "settings": { ".read": true, ".write": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'" },
+    "requests": {
+      ".read": "auth != null && auth.token.email_verified == true && auth.token.email == 'ADMIN_EMAIL_REPLACE_ME'",
+      "$requestId": {
+        ".write": "auth != null && auth.token.email_verified == true && ((!data.exists() && newData.child('uid').val() == auth.uid && newData.child('email').val() == auth.token.email) || auth.token.email == 'ADMIN_EMAIL_REPLACE_ME')"
+      }
+    },
+    "licenseKeys": { ".read": false, ".write": false },
+    "licenses": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": false
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}
