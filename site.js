@@ -5,7 +5,7 @@
   const msg = (text, bad = false) => { const el = $("#notice"); if (el) { el.textContent = text; el.className = `notice ${bad ? "bad" : ""}`; } };
   const el = (tag, text, cls) => { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; };
   const makeCard = (item) => {
-    const card = el("article", null, "card"); card.append(el("h2", item.name || item.title || item.game || "İsimsiz"));
+    const card = el("article", null, "content-card"); card.append(el("h2", item.name || item.title || item.game || "İsimsiz"));
     if (item.desc || item.description || item.detail) card.append(el("p", item.desc || item.description || item.detail));
     if (item.tag) card.append(el("small", item.tag, "tag"));
     if (item.state || item.status) card.append(el("p", item.state || item.status, "tag"));
@@ -25,10 +25,13 @@
       if (transform) value = transform(value);
       const list = Array.isArray(value) ? value : (value && typeof value === "object" ? Object.values(value) : []);
       list.filter(x => x && typeof x === "object" && !["a", "BURAYA_SCRIPT_1", "BURAYA_SCRIPT_2"].includes(x.name) && !String(x.code || "").includes("BURAYA_")).forEach(x => box.append(makeCard(x)));
-      if (!box.childElementCount) box.append(el("p", "Henüz yayınlanmış içerik yok.", "muted"));
+      if (!box.childElementCount) box.append(el("p", "Henüz yayınlanmış içerik yok.", "empty-state"));
     }, err => msg(`Firebase verisi okunamadı: ${err.message}`, true));
   };
-  document.querySelectorAll("[data-menu]").forEach(b => b.addEventListener("click", () => $("nav")?.classList.toggle("open")));
+  document.querySelectorAll("[data-menu]").forEach(b => b.addEventListener("click", () => {
+    const nav = $(".nav"); const opened = nav?.classList.toggle("open") || false;
+    b.setAttribute("aria-expanded", String(opened)); b.textContent = opened ? "×" : "☰";
+  }));
   const signOut = $("#signout"); if (signOut) signOut.addEventListener("click", () => window.klakzAuth?.signOut());
   if (page === "scripts" && window.klakzAuth) {
     const gate = $("#keyGate"), items = $("#items");
